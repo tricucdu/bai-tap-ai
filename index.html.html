@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Language Translator</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        textarea { width: 80%; height: 100px; padding: 10px; margin-bottom: 10px; }
+        select, button { padding: 10px; margin: 5px; }
+        #translatedText { font-size: 18px; font-weight: bold; color: #333; }
+    </style>
+</head>
+<body>
+    <h2>Free Language Translator</h2>
+    <textarea id="textInput" placeholder="Enter text to translate..."></textarea><br>
+
+    <select id="languageSelect">
+        <option value="es">Spanish</option>
+        <option value="fr">French</option>
+        <option value="de">German</option>
+        <option value="zh">Chinese</option>
+        <option value="ja">Japanese</option>
+    </select>
+
+    <button onclick="translateText()">Translate</button>
+
+    <h3>Translation:</h3>
+    <p id="translatedText">-</p>
+
+    <script>
+        async function translateText() {
+            let text = document.getElementById("textInput").value;
+            let targetLang = document.getElementById("languageSelect").value;
+
+            if (!text) {
+                alert("Please enter text to translate.");
+                return;
+            }
+
+            let apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|${targetLang}`;
+            
+            try {
+                let response = await fetch(apiUrl);
+                let data = await response.json();
+                document.getElementById("translatedText").innerText = data.responseData.translatedText;
+            } catch (error) {
+                document.getElementById("translatedText").innerText = "Error translating text.";
+            }
+        }
+    </script>
+</body>
+</html>
